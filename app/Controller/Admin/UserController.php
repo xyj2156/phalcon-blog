@@ -30,7 +30,7 @@ class UserController extends AdminBase
         // sql builder
         $builder = $this->modelsManager->createBuilder()
                                        ->columns('ID, user_login, user_email, user_registered, user_status')
-                                       ->from('ZPhal\Models\Users');
+                                       ->from(Users::class);
 
         if (isset($userSearch)) {
             $builder->where("user_login LIKE :user:", ["user" => "%".$userSearch."%"]);
@@ -47,7 +47,7 @@ class UserController extends AdminBase
                 ]
             ),
             [
-                'layoutClass' => 'ZPhal\Modules\Admin\Library\Paginator\Pager\Layout\Bootstrap', // 样式类
+                'layoutClass' => Pager\Layout\Bootstrap::class, // 样式类
                 'rangeLength' => 5, // 分页长度
                 'urlMask'     => '?page={%page_number}', // 额外url传参
             ]
@@ -73,7 +73,7 @@ class UserController extends AdminBase
     /**
      * 保存用户信息
      *
-     * @return Response|ResponseInterface
+     * @return Response|ResponseInterface|void
      */
     public function saveAction ()
     {
@@ -177,7 +177,7 @@ class UserController extends AdminBase
     /**
      * 更新个人信息
      *
-     * @return Response|ResponseInterface
+     * @return Response|ResponseInterface|void
      */
     public function updateInfoAction ()
     {
@@ -232,7 +232,7 @@ class UserController extends AdminBase
     /**
      * 更新密码
      *
-     * @return Response|ResponseInterface
+     * @return Response|ResponseInterface|void
      */
     public function updatePasswordAction ()
     {

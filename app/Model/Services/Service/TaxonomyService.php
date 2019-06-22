@@ -45,7 +45,7 @@ class TaxonomyService extends AbstractService
         return self::$modelsManager->executeQuery(
             "SELECT tt.term_taxonomy_id, tt.term_id, tt.description, tt.parent, tt.count, t.name, t.slug
                   FROM {$termTaxonomy} AS tt
-                  LEFT {$terms} AS t ON t.term_id=tt.term_id
+                  LEFT JOIN {$terms} AS t ON t.term_id=tt.term_id
                   WHERE tt.taxonomy = :taxonomy:
                   ORDER BY t.term_id ASC",
             [

@@ -9,6 +9,7 @@ use App\Model\Services\Service\PostmetaService;
 use App\Model\Services\Service\PostService;
 use Phalcon\Http\Response;
 use Phalcon\Http\ResponseInterface;
+use Phalcon\Mvc\Model\Query\Status;
 
 /**
  * 页面
@@ -147,7 +148,7 @@ class PageController extends AdminBase
 
             if ($submitWay == 'publish') {
                 // 发布时间
-                if (!$post->post_date || $post->post_date == $post::PUBLISH_DEFAULT_TIME) {
+                if (!$post->post_date || $post->post_date === $post::PUBLISH_DEFAULT_TIME) {
                     // 立即发布 or 编辑发布时间
                     if ($publishDate == 'now') {
                         $post->post_date = $post->post_modified;
@@ -653,7 +654,7 @@ class PageController extends AdminBase
 
                 /** @var PostmetaService $postmetaService */
                 $postmetaService = container(PostmetaService::class);
-                /** @var  $deleteTrashMeta */
+                /** @var Status $deleteTrashMeta */
                 $deleteTrashMeta = $postmetaService->deleteTrashMeta($id);
 
                 if ($deleteTrashMeta->success() === false) {

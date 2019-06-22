@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Model\Resources;
 use App\Plugin\Media;
 use Phalcon\Mvc\View;
 
@@ -36,7 +37,7 @@ class MediaController extends AdminBase
                                          ->columns([
                                              "resource_id", "upload_date", "resource_title", "guid", "resource_type",
                                          ])
-                                         ->from("ZPhal\Models\Resources")
+                                         ->from(Resources::class)
                                          ->where("upload_author = {$userId}")
                                          ->orderBy("resource_id DESC")
                                          ->limit(20, 0)

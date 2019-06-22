@@ -17,8 +17,7 @@
 
         <div class="col-md-12 ">
             <ul class="mailbox-attachments clearfix">
-                <?php
-                foreach ($resources as $k => $v) {
+                <?php foreach ($resources as $k => $v) {
                     if ($v['resource_type'] == 'picture') { ?>
                         <li id="meida_<?= $v['resource_id'] ?>">
                             <span class="">
@@ -54,7 +53,7 @@
                             </span>
                             </div>
                         </li>
-                    <?
+                        <?php
                     }
                 } ?>
 

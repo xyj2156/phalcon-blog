@@ -6,6 +6,7 @@ use App\Library\Paginator\Pager;
 use App\Model\Posts;
 use App\Model\Services\AbstractService;
 use App\Model\TermRelationships;
+use App\Model\Terms;
 use App\Model\TermTaxonomy;
 use App\Model\Users;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
@@ -43,14 +44,15 @@ class PostService extends AbstractService
      */
     public function staticPost ($postType)
     {
+        $postsModel = Posts::class;
         $count = self::$modelsManager->executeQuery(
             "SELECT sum(case post_status when 'publish' then 1 else 0 end) AS publish_num,
             sum(case post_status when 'draft' then 1 else 0 end) AS draft_num,
             sum(case post_status when 'trash' then 1 else 0 end) AS trash_num
-            FROM ".Posts::class." 
-            WHERE post_type = :posttype:",
+            FROM {$postsModel} 
+            WHERE post_type = :postType:",
             [
-                'posttype' => $postType,
+                'postType' => $postType,
             ]
         )->toArray();
 
@@ -66,14 +68,15 @@ class PostService extends AbstractService
      */
     public function getDateSection ($postType)
     {
+        $postsModel = Posts::class;
         return self::$modelsManager->executeQuery(
             "SELECT DATE_FORMAT(post_date,'%Y-%m') AS year_month
-            FROM ".Posts::class."
-            WHERE post_type = :posttype: 
+            FROM {$postsModel}
+            WHERE post_type = :postType: 
             GROUP BY year_month 
             ORDER BY year_month DESC",
             [
-                'posttype' => $postType,
+                'postType' => $postType,
             ]
         )->toArray();
     }
@@ -95,6 +98,7 @@ class PostService extends AbstractService
         $userModle = Users::class;
         $termRelationships = TermRelationships::class;
         $termTaxnomy = TermTaxonomy::class;
+        $terms = Terms::class;
         // sql builder
         $builder = self::$modelsManager->createBuilder()
                                        ->columns("p.ID, p.post_title, p.post_status, p.post_author, p.post_date, p.comment_count, p.view_count, u.display_name,
@@ -104,7 +108,7 @@ class PostService extends AbstractService
                                        ->leftJoin($termRelationships, 'ts.object_id = p.ID', 'ts')
                                        ->leftJoin($termTaxnomy,
                                            'tt.term_taxonomy_id = ts.term_taxonomy_id', 'tt')
-                                       ->leftJoin('ZPhal\Models\Terms', 't.term_id = tt.term_id', 't')
+                                       ->leftJoin($terms, 't.term_id = tt.term_id', 't')
                                        ->where("p.post_type = :type:", ["type" => $type]);
 
         if ($condition['categorySelected']) {

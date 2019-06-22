@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Providers\ServiceProvider\AbstractServiceProvider;
+use Phalcon\Session\AdapterInterface;
 
 /**
  * Class SessionService
@@ -24,7 +25,7 @@ class SessionService extends AbstractServiceProvider
      *
      * 注册session服务
      *
-     * @return mixed
+     * @return AdapterInterface
      */
     public function register ()
     {
@@ -39,7 +40,7 @@ class SessionService extends AbstractServiceProvider
             'lifetime' => $config->lifetime,
         ];
 
-        /** @var \Phalcon\Session\AdapterInterface $session */
+        /** @var AdapterInterface $session */
         $session = new $adapter(array_merge($driver->toArray(), $defaults));
         $session->start();
 
