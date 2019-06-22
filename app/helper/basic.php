@@ -118,9 +118,13 @@ if (!function_exists('get_or_create_path')) {
     function get_or_create_path ()
     {
         $params = func_get_args();
-        $path = implode(DIRECTORY_SEPARATOR, $params);
-        if (!file_exists($path)) {
-            @mkdir($path, 0777, true);
+        $make = $path = implode(DIRECTORY_SEPARATOR, $params);
+        $_info = pathinfo($path);
+        if (!empty($_info['extension'])) {
+            $make = $_info['dirname'];
+        }
+        if (!file_exists($make)) {
+            @mkdir($make, 0777, true);
         }
         return $path;
     }
