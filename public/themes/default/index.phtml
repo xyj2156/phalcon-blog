@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <?php echo $this->tag->getTitle(); ?>
+    <meta name="description" content="<?php if (isset($coverDescription)) {
+        echo $coverDescription;
+    } else {
+        echo $siteDescription;
+    } ?>">
+    <meta name="keywords" content="<?php if (isset($coverKeywords)) {
+        echo $coverKeywords;
+    } else {
+        echo $siteKeywords;
+    } ?>"/>
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <?php
+    /* HTML 头部资源 */
+    $this->assets->outputCss(); // 加载zphal默认加载的css
+    echo $this->tag->stylesheetLink("themes/default/public/library/bootstrap/css/bootstrap.min.css"); // Bootstrap
+    echo $this->tag->stylesheetLink("themes/default/public/library/font-awesome-4.7.0/css/font-awesome.min.css"); // Bootstrap
+    echo $this->tag->stylesheetLink("themes/default/public/css/globals.css");
+    ?>
+</head>
+<body class="d-flex flex-column">
+<!-- 加载header -->
+<?php $this->partial("shared/header"); ?>
+
+<!-- 加载common模块 -->
+<div class="content col-12 flex-grow">
+    <?php echo $this->getContent(); ?>
+</div>
+
+<!-- 加载footer -->
+<footer class="footer col-12">
+    <?php $this->partial("shared/footer"); ?>
+</footer>
+
+<?php
+/* HTML尾部资源 */
+echo $this->tag->javascriptInclude("themes/default/public/js/jquery.min.js");
+echo $this->tag->javascriptInclude("themes/default/public/js/popper.min.js");
+echo $this->tag->javascriptInclude("themes/default/public/library/bootstrap/js/bootstrap.min.js");
+echo $this->tag->javascriptInclude("themes/default/public/js/ie10-viewport-bug-workaround.js");
+$this->assets->outputJs(); // 加载zphal默认加载的js
+?>
+</body>
+</html>

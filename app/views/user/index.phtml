@@ -1,0 +1,85 @@
+<!-- 页头 -->
+<section class="content-header">
+    <div class="msgTip col-md-12">
+        <div class="row">
+            <?php $this->flash->output(); ?>
+        </div>
+    </div>
+    <h1>
+        用户列表
+        <small>以下为所有用户</small>
+    </h1>
+</section>
+
+<!-- 主内容 -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">user</h3>
+
+                    <div class="box-tools">
+                        <form action="<?= $this->url->get("admin/user"); ?>" method="POST">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text" name="user_search" class="form-control pull-right" placeholder="搜索"
+                                       value="<?= $userSearch ?>">
+
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>邮箱</th>
+                            <th>注册时间</th>
+                            <th>状态</th>
+                        </tr>
+                        <?php
+                        foreach ($pager->getIterator() as $v) { ?>
+                            <tr>
+                                <td><?php echo $v->ID ?></td>
+                                <td><?php echo $v->user_login ?></td>
+                                <td><?php echo $v->user_email ?></td>
+                                <td><?php echo $v->user_registered ?></td>
+                                <td>
+                                    <span class="label
+                                    <?php if ($v->user_status == 0) {
+                                        echo ' label-success';
+                                    } elseif ($v->user_status == 1) {
+                                        echo ' label-warning';
+                                    } elseif ($v->user_status == 2) {
+                                        echo ' label-danger';
+                                    } ?>
+                                    ">
+                                        <?php if ($v->user_status == 0) {
+                                            echo '正常';
+                                        } elseif ($v->user_status == 1) {
+                                            echo '冻结';
+                                        } elseif ($v->user_status == 2) {
+                                            echo '失效';
+                                        } ?>
+                                    </span>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </div>
+
+                <div class="box-footer clearfix">
+                    <?php if ($pager->haveToPaginate()) {
+                        echo $pager->getLayout();
+                    } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
