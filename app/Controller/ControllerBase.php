@@ -20,4 +20,9 @@ abstract class ControllerBase extends \Phalcon\Mvc\Controller
     public function initialize ()
     {
     }
+
+    public function afterAction ()
+    {
+        $pa = 1;
+    }
 }

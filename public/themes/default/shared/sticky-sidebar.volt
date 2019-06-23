@@ -1,12 +1,12 @@
 <div class="sidebar sticky-sidebar">
     <div class="widget widget-category d-block clearfix">
         <h4><span><i class="fa fa-tags"></i>&nbsp;分类</span></h4>
-        <?= $widgetCategory ?>
+        {{ widgetCategory }}
     </div>
 
     <div class="widget widget-news d-block">
         <h4><span><i class="fa fa-leaf"></i>&nbsp;最新文章</span></h4>
-        <?= $widgetNewArticle ?>
+        {{ widgetNewArticle }}
     </div>
 
     <!--<div class="widget widget-comments d-block clearfix">
@@ -30,7 +30,8 @@
     </div>
 
     <div class="widget widget-static d-block">
-        <h4><span><i class="fa fa-fire"></i>&nbsp;统计</span></h4>
-
+        <h4>
+            <span><i class="fa fa-fire"></i>&nbsp;统计</span>
+        </h4>
     </div>-->
 </div>

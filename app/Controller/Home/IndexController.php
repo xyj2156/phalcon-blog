@@ -110,7 +110,7 @@ class IndexController extends HomeBase
             }
 
             // the post list
-            $postList = $pager->getIterator()->toArray();
+            $postList = $pager->getIterator();
 
             /**
              * get categories and tags

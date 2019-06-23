@@ -136,13 +136,13 @@ class ArticlesController extends HomeBase
                 }
 
 
-                $post = $post->toArray();
+//                $post = $post->toArray();
                 $markupFixer = new \TOC\MarkupFixer();
                 $tocGenerator = new \TOC\TocGenerator();
-                $post['post_date'] = date('Y-m-d H:i', strtotime($post['post_date']));
-                $post['post_html_content'] = $markupFixer->fix($post['post_html_content']);
-                $post['guid'] = $this->option->get('siteurl').$post['guid'];
-                $post['toc'] = $tocGenerator->getHtmlMenu($post['post_html_content']) ?: '无';
+                $post->post_date = date('Y-m-d H:i', strtotime($post['post_date']));
+                $post->post_html_content = $markupFixer->fix($post['post_html_content']);
+                $post->guid = $this->option->get('siteurl').$post['guid'];
+                $post->toc = $tocGenerator->getHtmlMenu($post['post_html_content']) ?: '无';
 
                 $this->view->setVars([
                     'post'             => $post,

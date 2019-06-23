@@ -4,8 +4,9 @@ namespace App\Controller\Home;
 
 
 use App\Model\Posts;
+use App\Model\SubjectRelationships;
 use App\Model\Subjects;
-use App\Model\TermRelationships;
+use Phalcon\Mvc\Model\Resultset\Simple;
 
 class SubjectsController extends HomeBase
 {
@@ -27,25 +28,30 @@ class SubjectsController extends HomeBase
 
             $this->tag->prependTitle('专题'." - ");
 
-            $subjects = Subjects::find([
+            /** @var Simple $_subjects */
+            $_subjects = Subjects::find([
                 "parent = ?1",
                 "bind" => [
                     1 => $parent,
                 ],
-            ])->toArray();
+            ]);
+            if ($_subjects->count()) {
+//                查询结果是一个迭代器 且不能修改 迭代的值 所以这里使用新的数组变量
+                $subjects = [];
+                foreach ($_subjects as $key => $subject) {
+                    $last_updated = $subject['last_updated'];
+                    $diff_updated = calculateDateDiff($last_updated);
+                    $link = $this->url->get(["for" => "subject", "params" => $subject['subject_id']]);
 
-            if ($subjects) {
-                foreach ($subjects as $key => $subject) {
-                    $subjects[$key]['last_updated'] = calculateDateDiff($subject['last_updated']);
-                    $subjects[$key]['link'] = $this->url->get(["for" => "subject", "params" => $subject['subject_id']]);
+                    $subject->link = $link;
+                    $subject->last_updated = $diff_updated;
+
+                    $subjects[$key] = $subject;
                 }
 
                 // Get self Info
                 if ($parent > 0) {
                     $self = Subjects::findFirst($parent);
-                    if ($self) {
-                        $self = $self->toArray();
-                    }
                 } else {
                     $self = false;
                 }
@@ -60,6 +66,8 @@ class SubjectsController extends HomeBase
                         'key' => 'subject-'.$parent,
                     ]
                 );
+
+                unset($_subjects);
             } else {
                 $this->dispatcher->forward(
                     [
@@ -99,14 +107,13 @@ class SubjectsController extends HomeBase
 
             $posts = $this->modelsManager->createBuilder()
                                          ->columns("p.ID, p.post_html_content, p.post_title, p.post_date, p.guid, p.comment_count, p.view_count")
-                                         ->from(['sr' => TermRelationships::class])
+                                         ->from(['sr' => SubjectRelationships::class])
                                          ->leftJoin(Posts::class, 'p.ID = sr.object_id', "p")
                                          ->where("sr.subject_id = :id: AND p.post_type = 'post' AND p.post_status = 'publish'",
                                              ["id" => $subject->subject_id])
                                          ->orderBy("sr.order_num ASC")
                                          ->getQuery()
-                                         ->execute()
-                                         ->toArray();
+                                         ->execute();
 
             $this->view->setVars([
                 'posts'              => $posts,

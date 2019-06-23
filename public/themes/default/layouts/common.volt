@@ -2,11 +2,11 @@
     <div class="row">
         <div class="main-contain col-12 col-md-9">
             <!-- 加载主内容 -->
-            <?php echo $this->getContent(); ?>
+            {{ content() }}
         </div>
         <div class="right-sidebar d-none d-md-block col-3">
-            <?php $this->partial("shared/top-sidebar"); ?>
-            <?php $this->partial("shared/sticky-sidebar"); ?>
+            {{ partial("shared/top-sidebar") }}
+            {{ partial("shared/sticky-sidebar") }}
         </div>
     </div>
 </div>

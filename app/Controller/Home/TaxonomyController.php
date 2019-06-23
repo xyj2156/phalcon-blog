@@ -95,7 +95,7 @@ class TaxonomyController extends HomeBase
 
 
                 // the post list
-                $postList = $pager->getIterator()->toArray();
+                $postList = $pager->getIterator();
 
                 /**
                  * get categories and tags
@@ -169,7 +169,7 @@ class TaxonomyController extends HomeBase
                                         ->where("tr.object_id = :id:", ["id" => $id])
                                         ->getQuery()
                                         ->execute();
-        $taxonomy = empty($taxonomy) ?: $taxonomy->toArray();
+//        $taxonomy = empty($taxonomy) ?: $taxonomy->toArray();
 
         $output = [];
         foreach ($taxonomy as $item) {
@@ -177,7 +177,6 @@ class TaxonomyController extends HomeBase
                 $output[$item['taxonomy']][] = $item;
             }
         }
-
         return $output;
     }
 }
