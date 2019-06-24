@@ -35,7 +35,9 @@ class LoginController extends ControllerBase
 
     public function registerAction ()
     {
-
+        $this->view->setRenderLevel(
+            View::LEVEL_ACTION_VIEW
+        );
     }
 
 }

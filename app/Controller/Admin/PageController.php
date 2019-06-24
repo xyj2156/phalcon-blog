@@ -82,7 +82,7 @@ class PageController extends AdminBase
         $parentPages = Posts::find([
             "post_type = 'page' AND post_status = 'publish' ",
             "columns" => "ID, post_title",
-        ])->toArray();
+        ]);
 
         /**
          * TODO

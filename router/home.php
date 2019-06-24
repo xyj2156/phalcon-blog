@@ -81,3 +81,10 @@ $router->add('/login', [
     'controller' => 'login',
     'action'     => 'index',
 ])->setName('admin-login');
+
+$router->add('/register', [
+    'namespace'  => 'App\Controller\Admin',
+    'controller' => 'login',
+    'action'     => 'register',
+])->setName('admin-login');
+

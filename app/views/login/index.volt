@@ -1,24 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- title -->
-    <?php echo $this->tag->getTitle(); ?>
+    {{ get_title() }}
 
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="icon" href="<?= $this->url->get('backend/img/favicon.ico'); ?>">
+    <link rel="icon" href="{{ url.get('backend/img/favicon.ico') }}">
 
-    <?php
-    /* HTML 头部资源 */
-    echo $this->tag->stylesheetLink("backend/library/bootstrap/css/bootstrap.min.css");
-    echo $this->tag->stylesheetLink("backend/library/font-awesome/css/font-awesome.min.css");
-    echo $this->tag->stylesheetLink("backend/library/Ionicons/css/ionicons.min.css");
-    echo $this->tag->stylesheetLink("backend/library/AdminLTE/css/AdminLTE-without-plugins.min.css");
-    echo $this->tag->stylesheetLink("backend/plugins/iCheck/square/blue.css");
-    ?>
+    {{ stylesheet_link('backend/library/bootstrap/css/bootstrap.min.css') }}
+    {{ stylesheet_link('backend/library/font-awesome/css/font-awesome.min.css') }}
+    {{ stylesheet_link('backend/library/Ionicons/css/ionicons.min.css') }}
+    {{ stylesheet_link('backend/library/AdminLTE/css/AdminLTE-without-plugins.min.css') }}
+    {{ stylesheet_link('backend/plugins/iCheck/square/blue.css') }}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -31,20 +28,16 @@
 <body class="hold-transition login-page" style="height: auto">
 <div class="login-box">
     <div class="login-logo">
-        <?= $this->tag->image([
-            "backend/img/logo-gray.png",
-            "alt" => "ZPhal",
-        ]) ?>
+        {{ image('backend/img/logo-gray.png','alt':'Json-blog') }}
     </div>
 
     <div class="msgTip">
-        <?php $this->flash->output(); ?>
+        {{ flash.output() }}
     </div>
 
     <div class="login-box-body">
         <p class="login-box-msg">登录</p>
-
-        <form action="<?= $this->url->get("admin/session/login"); ?>" method="post">
+        <form action="{{ url.get("admin/session/login") }}" method="post">
             <div class="form-group has-feedback">
                 <input type="text" name="user" class="form-control" placeholder="用户名">
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -54,8 +47,8 @@
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="form-group">
-                <input type="hidden" name="<?php echo $this->security->getTokenKey() ?>"
-                       value="<?php echo $this->security->getToken() ?>"/>
+                <input type="hidden" name="{{ security.getTokenKey() }}"
+                       value="{{ security.getToken() }}"/>
             </div>
             <div class="row">
                 <div class="col-xs-8">
@@ -65,28 +58,23 @@
                         </label>
                     </div>
                 </div>
-
                 <div class="col-xs-4">
                     <button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
                 </div>
             </div>
         </form>
-
         <br>
-
         <div>
             <a href="#" style="color: #9d9d9d"><i class="fa fa-key"></i> 忘记密码</a>
-            <a href="register.html" class="right" style="float: right; color: #9d9d9d"><i class="fa fa-leaf"></i>
+            <a href="register" class="right" style="float: right; color: #9d9d9d"><i class="fa fa-leaf"></i>
                 注册用户</a>
         </div>
     </div>
 </div>
 
-<?php
-/* HTML尾部资源 */
-echo $this->tag->javascriptInclude("backend/js/jquery.min.js");
-echo $this->tag->javascriptInclude("backend/library/bootstrap/js/bootstrap.min.js");
-echo $this->tag->javascriptInclude("backend/plugins/iCheck/icheck.min.js");
-?>
+{{ javascript_include('backend/js/jquery.min.js') }}
+{{ javascript_include('backend/library/bootstrap/js/bootstrap.min.js') }}
+{{ javascript_include('backend/plugins/iCheck/icheck.min.js') }}
+
 </body>
 </html>

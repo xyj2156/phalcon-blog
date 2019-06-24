@@ -27,134 +27,113 @@ class TaxonomyController extends AdminBase
     public function taxonomyAction ()
     {
         $type = $this->dispatcher->getParam("type");
+
         // 当前页数
         $currentPage = abs($this->request->getQuery('page', 'int', 1));
         if ($currentPage == 0) {
             $currentPage = 1;
         }
 
-        /**
-         * 分类目录
-         */
-        if ($type == TermTaxonomy::TAXONOMY_CATEGORY) {
-            $this->tag->prependTitle("分类 - ");
-            $topTitle = '分类';
-            $topSubtitle = '文章的分类';
+        switch ($type) {
+            /** 分类目录 */
+            case TermTaxonomy::TAXONOMY_CATEGORY:
+                $this->tag->prependTitle("分类 - ");
+                $topTitle = '分类';
+                $topSubtitle = '文章的分类';
+                /** @var TaxonomyService $taxonomyService */
+                $taxonomyService = container(TaxonomyService::class);
+                $category = $taxonomyService->getTaxonomyListByType('category');
+                $categoryTree = makeTree($category, 'term_taxonomy_id', 'parent', 'sun', 0);
 
-            /** @var TaxonomyService $taxonomyService */
-            $taxonomyService = container(TaxonomyService::class);
-            $category = $taxonomyService->getTaxonomyListByType('category');
-            $categoryTree = makeTree($category, 'term_taxonomy_id', 'parent', 'sun', 0);
-
-            // 获取分类列表
-            $pager = new Pager(
-                new PaginatorArray(
+                // 获取分类列表
+                $pager = new Pager(
+                    new PaginatorArray(
+                        [
+                            "data"  => $category,
+                            "limit" => 20,
+                            "page"  => $currentPage,
+                        ]
+                    ),
                     [
-                        "data"  => $category,
-                        "limit" => 20,
-                        "page"  => $currentPage,
+                        'layoutClass' => Pager\Layout\Bootstrap::class, // 样式类
+                        'rangeLength' => 5, // 分页长度
+                        'urlMask'     => '?page={%page_number}', // 额外url传参
                     ]
-                ),
-                [
-                    'layoutClass' => Pager\Layout\Bootstrap::class, // 样式类
-                    'rangeLength' => 5, // 分页长度
-                    'urlMask'     => '?page={%page_number}', // 额外url传参
-                ]
-            );
+                );
+                break;
+            /** 标签目录 */
+            case TermTaxonomy::TAXONOMY_TAG:
+                $this->tag->prependTitle("标签 - ");
+                $topTitle = '标签';
+                $topSubtitle = '文章贴标签';
 
-            $this->view->setVars(
-                [
-                    "type"         => $type,
-                    "topTitle"     => $topTitle,
-                    "topSubtitle"  => $topSubtitle,
-                    "categoryTree" => treeHtml($categoryTree, 'term_taxonomy_id', 'name'),
-                    "pager"        => $pager,
-                ]
-            );
+                $taxonomyService = container(TaxonomyService::class);
+                $tags = $taxonomyService->getTaxonomyListByType('tag');
 
-        } /**
-         * 标签
-         */
-        elseif ($type == TermTaxonomy::TAXONOMY_TAG) {
-            $this->tag->prependTitle("标签 - ");
-            $topTitle = '标签';
-            $topSubtitle = '文章贴标签';
-
-            $taxonomyService = container(TaxonomyService::class);
-            $tags = $taxonomyService->getTaxonomyListByType('tag');
-
-            /**
-             * 获取分类列表
-             */
-            $pager = new Pager(
-                new PaginatorArray(
+                /**
+                 * 获取分类列表
+                 */
+                $pager = new Pager(
+                    new PaginatorArray(
+                        [
+                            "data"  => $tags,
+                            "limit" => 20,
+                            "page"  => $currentPage,
+                        ]
+                    ),
                     [
-                        "data"  => $tags,
-                        "limit" => 20,
-                        "page"  => $currentPage,
+                        // We will use Bootstrap framework styles
+                        'layoutClass' => Pager\Layout\Bootstrap::class,
+                        // Range window will be 5 pages
+                        'rangeLength' => 5,
+                        // Just a string with URL mask
+                        'urlMask'     => '?page={%page_number}',
                     ]
-                ),
-                [
-                    // We will use Bootstrap framework styles
-                    'layoutClass' => Pager\Layout\Bootstrap::class,
-                    // Range window will be 5 pages
-                    'rangeLength' => 5,
-                    // Just a string with URL mask
-                    'urlMask'     => '?page={%page_number}',
-                ]
-            );
+                );
+                break;
+            /** 连接目录 */
+            case TermTaxonomy::TAXONOMY_LINK:
+                $this->tag->prependTitle("链接分类 - ");
+                $topTitle = '链接分类';
+                $topSubtitle = '链接分类';
 
-            $this->view->setVars(
-                [
-                    "type"        => $type,
-                    "topTitle"    => $topTitle,
-                    "topSubtitle" => $topSubtitle,
-                    "pager"       => $pager,
-                ]
-            );
+                $taxonomyService = container(TaxonomyService::class);
+                $linkCategory = $taxonomyService->getTaxonomyListByType('linkCategory');
 
-        } elseif ($type == TermTaxonomy::TAXONOMY_LINK) {
-            $this->tag->prependTitle("链接分类 - ");
-            $topTitle = '链接分类';
-            $topSubtitle = '链接分类';
-
-            $taxonomyService = container(TaxonomyService::class);
-            $linkCategory = $taxonomyService->getTaxonomyListByType('linkCategory');
-
-            /**
-             * 获取分类列表
-             */
-            $pager = new Pager(
-                new PaginatorArray(
+                /**
+                 * 获取分类列表
+                 */
+                $pager = new Pager(
+                    new PaginatorArray(
+                        [
+                            "data"  => $linkCategory,
+                            "limit" => 20,
+                            "page"  => $currentPage,
+                        ]
+                    ),
                     [
-                        "data"  => $linkCategory,
-                        "limit" => 20,
-                        "page"  => $currentPage,
+                        // We will use Bootstrap framework styles
+                        'layoutClass' => Pager\Layout\Bootstrap::class,
+                        // Range window will be 5 pages
+                        'rangeLength' => 5,
+                        // Just a string with URL mask
+                        'urlMask'     => '?page={%page_number}',
                     ]
-                ),
-                [
-                    // We will use Bootstrap framework styles
-                    'layoutClass' => Pager\Layout\Bootstrap::class,
-                    // Range window will be 5 pages
-                    'rangeLength' => 5,
-                    // Just a string with URL mask
-                    'urlMask'     => '?page={%page_number}',
-                ]
-            );
+                );
+                break;
 
-            $this->view->setVars(
-                [
-                    "type"        => $type,
-                    "topTitle"    => $topTitle,
-                    "topSubtitle" => $topSubtitle,
-                    "pager"       => $pager,
-                ]
-            );
-        } else {
-
-            $this->flash->error("错误操作!");
-            return $this->response->redirect("admin/");
+            default:
+                $this->flash->error("错误操作!");
+                return $this->response->redirect("admin/");
         }
+
+        $viewVar = compact('type', 'topTitle', 'topSubtitle', 'pager');
+        if (isset($categoryTree)) {
+            $viewVar ['categoryTree'] = $categoryTree;
+        }
+
+        $this->view->setVars($viewVar);
+
     }
 
     /**

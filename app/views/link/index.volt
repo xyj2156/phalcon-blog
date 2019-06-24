@@ -1,14 +1,5 @@
 <!-- 页头 -->
-<section class="content-header">
-    <div class="msgTip col-md-12">
-        <div class="row">
-            <?php $this->flash->output(); ?>
-        </div>
-    </div>
-    <h1>
-        链接列表
-    </h1>
-</section>
+{{ partial('layouts/content_header', {'_1title':'链接列表'}) }}
 
 <section class="content">
     <div class="row">

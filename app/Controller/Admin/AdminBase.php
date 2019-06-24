@@ -88,6 +88,7 @@ abstract class AdminBase extends ControllerBase
         $this->assets->addJs("backend/library/bootstrap/js/bootstrap.min.js", true);
         $this->assets->addJs("backend/library/fastclick/lib/fastclick.js", true);
         $this->assets->addJs("backend/library/AdminLTE/js/adminlte.min.js", true);
+        $this->assets->addJs("backend/js/jason.js", true);
     }
 
     /**

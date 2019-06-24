@@ -33,21 +33,21 @@ class MediaController extends AdminBase
 
         $userId = $this->getUserId();
 
-        $resources = $this->modelsManager->createBuilder()
-                                         ->columns([
+        $_resources = $this->modelsManager->createBuilder()
+                                          ->columns([
                                              "resource_id", "upload_date", "resource_title", "guid", "resource_type",
                                          ])
-                                         ->from(Resources::class)
-                                         ->where("upload_author = {$userId}")
-                                         ->orderBy("resource_id DESC")
-                                         ->limit(20, 0)
-                                         ->getQuery()
-                                         ->execute()
-                                         ->toArray();
+                                          ->from(Resources::class)
+                                          ->where("upload_author = {$userId}")
+                                          ->orderBy("resource_id DESC")
+                                          ->limit(20, 0)
+                                          ->getQuery()
+                                          ->execute();
 
-
-        foreach ($resources as $key => $resource) {
-            $resources[$key]['guid'] = $this->config->application->baseUri.$resource['guid'];
+        $resources = [];
+        foreach ($_resources as $key => $resource) {
+            $resource->guid = $this->config->application->baseUri.$resource['guid'];
+            $resources[$key] = $resource;
         }
         //print_r($resources);exit;
         $this->view->setVars(
@@ -64,14 +64,12 @@ class MediaController extends AdminBase
     {
         $this->tag->prependTitle("媒体添加 - ");
 
-        $this->view->setRenderLevel(
-            View::LEVEL_ACTION_VIEW
-        );
 
         $this->assets->addCss("backend/library/bootstrap-fileinput/css/fileinput.min.css", true);
         $this->assets->addJs("backend/library/bootstrap-fileinput/js/fileinput.min.js", true);
         $this->assets->addJs("backend/library/bootstrap-fileinput/js/locales/zh.js", true);
         $this->assets->addJs("backend/library/bootstrap-fileinput/themes/fa/theme.min.js", true);
+        $this->assets->addJs("backend/js/media_new.js", true);
 
     }
 
