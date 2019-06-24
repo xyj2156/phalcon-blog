@@ -7,6 +7,12 @@
 
 // 用于展示总体执行时间
 header_register_callback(function () {
+    try {
+//    日志事务提交
+        container('logger')->commit();
+    } catch (\Exception $exception) {
+
+    }
     $total = microtime(true) - START_TIME;
     header('X-Exec-Time:'.$total);
     foreach ([
@@ -25,4 +31,7 @@ $services = include config_path('services.php');
 foreach ($services as $class) {
     /** @var $class App\Providers\ServiceProvider\AbstractServiceProvider */
     $class::handle($di, null);
+    unset($class);
 }
+
+$logger = $di->getLogger();

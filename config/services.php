@@ -26,4 +26,5 @@ return [
     \App\Providers\WidgetService::class,
     \App\Providers\OptionService::class,
     \App\Providers\VisitCounterService::class,
+    \App\Providers\LoggerService::class,
 ];
