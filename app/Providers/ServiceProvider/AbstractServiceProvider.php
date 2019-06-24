@@ -8,9 +8,9 @@ use Phalcon\Mvc\User\Component;
 
 /**
  * 服务提供者抽象类
- * ZPhal\Modules\Admin\Providers\AbstractServiceProvider
+ * Class AbstractServiceProvider
  *
- * @package ZPhal\Modules\Admin\Providers
+ * @package App\Providers\ServiceProvider
  */
 abstract class AbstractServiceProvider extends Component implements ServiceProviderInterface
 {

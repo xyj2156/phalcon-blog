@@ -2,7 +2,8 @@
 
 namespace App\Library\Paginator;
 
-use App\Libaray\Paginator\Pager\Layout;
+use App\Library\Paginator\Pager\Layout;
+use App\Library\Paginator\Pager\Range\Sliding;
 use Phalcon\Paginator\AdapterInterface;
 
 /**
@@ -217,7 +218,7 @@ class Pager implements \IteratorAggregate, \Countable
     protected function getRangeClass ()
     {
         if (!array_key_exists('rangeClass', $this->options)) {
-            $this->options['rangeClass'] = 'ZPhal\Modules\Frontend\Libraries\Paginator\Pager\Range\Sliding';
+            $this->options['rangeClass'] = Sliding::class;
         }
 
         return $this->options['rangeClass'];

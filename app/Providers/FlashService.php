@@ -7,9 +7,9 @@ use Phalcon\Flash\Session;
 
 /**
  * 闪存提示
- * ZPhal\Modules\Admin\Providers\Flash\ServiceProvider
+ * Class FlashService
  *
- * @package ZPhal\Modules\Admin\Providers\Flash
+ * @package App\Providers
  */
 class FlashService extends AbstractServiceProvider
 {

@@ -7,9 +7,9 @@ use Phalcon\DiInterface;
 
 /**
  * 服务提供者接口
- * App\Provider\ServiceProvider\ServiceProviderInterface
+ * Interface ServiceProviderInterface
  *
- * @package ZPhal\Modules\Admin\Providers
+ * @package App\Providers\ServiceProvider
  */
 interface ServiceProviderInterface extends InjectionAwareInterface
 {

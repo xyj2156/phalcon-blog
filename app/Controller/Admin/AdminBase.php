@@ -24,6 +24,9 @@ abstract class AdminBase extends ControllerBase
     public function initialize ()
     {
         parent::initialize();
+
+//        $this -> view -> setTemplateAfter('common');
+
         $this->staticResource();
         $this->tag->setTitle($this->option->get('blogname')." | Jason");
         $this->view->setViewsDir(app_path('views'));

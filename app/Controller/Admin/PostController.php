@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 
-use App\Library\Widget\Part\Post;
 use App\Model\Postmeta;
 use App\Model\Posts;
 use App\Model\Services\Service\PostService;
@@ -19,7 +18,7 @@ use Phalcon\Http\ResponseInterface;
  * 文章相关
  * Class PostController
  *
- * @package ZPhal\Modules\Admin\Controllers
+ * @package App\Controller\Admin
  */
 class PostController extends AdminBase
 {

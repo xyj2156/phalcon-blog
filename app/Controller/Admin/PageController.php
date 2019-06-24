@@ -15,7 +15,7 @@ use Phalcon\Mvc\Model\Query\Status;
  * 页面
  * Class PageController
  *
- * @package ZPhal\Modules\Admin\Controllers
+ * @package App\Controller\Admin
  */
 class PageController extends AdminBase
 {

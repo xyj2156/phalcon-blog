@@ -29,7 +29,7 @@ class DispatcherService extends AbstractServiceProvider
     {
         // dispatcher
         $dispatcher = new Dispatcher();
-        $dispatcher->setDefaultNamespace('ZPhal\Modules\Frontend\Controllers\\');
+        $dispatcher->setDefaultNamespace('Admin\Controller\Home\\');
 
         // eventsManager
         $debug = container('config')->debug;

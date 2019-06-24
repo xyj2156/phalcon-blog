@@ -2,7 +2,7 @@
 
 namespace App\Library\Paginator\Pager\Range;
 
-use App\Libaray\Paginator\Pager\Range;
+use App\Library\Paginator\Pager\Range;
 
 /**
  * App\Library\Paginator\Pager\Range\Sliding

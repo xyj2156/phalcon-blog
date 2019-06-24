@@ -45,7 +45,7 @@ class SubjectController extends AdminBase
                 ]
             ),
             [
-                'layoutClass' => 'ZPhal\Modules\Admin\Library\Paginator\Pager\Layout\Bootstrap', // 样式类
+                'layoutClass' => Pager\Layout\Bootstrap::class, // 样式类
                 'rangeLength' => 5, // 分页长度
                 'urlMask'     => '?page={%page_number}', // 额外url传参
             ]

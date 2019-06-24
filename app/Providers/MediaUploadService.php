@@ -10,8 +10,9 @@ use Phalcon\Events\Manager as EventsManager;
 
 /**
  * 文件上传
+ * Class MediaUploadService
  *
- * @package ZPhal\Modules\Admin\Providers\MediaUpload
+ * @package App\Providers
  */
 class MediaUploadService extends AbstractServiceProvider
 {

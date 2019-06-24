@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Libaray\Paginator\Pager;
+namespace App\Library\Paginator\Pager;
 
 use App\Library\Paginator\Pager;
 

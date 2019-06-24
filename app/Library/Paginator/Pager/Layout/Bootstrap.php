@@ -2,11 +2,12 @@
 
 namespace App\Library\Paginator\Pager\Layout;
 
-use App\Libaray\Paginator\Pager\Layout;
+use App\Library\Paginator\Pager\Layout;
 
 /**
- * ZPhal\Modules\Admin\Library\Paginator\Pager\Layout\Bootstrap
- * Pager layout that uses Twitter Bootstrap styles.
+ * Class Bootstrap
+ *
+ * @package App\Library\Paginator\Pager\Layout
  */
 class Bootstrap extends Layout
 {

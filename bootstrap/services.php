@@ -13,6 +13,12 @@ header_register_callback(function () {
     } catch (\Exception $exception) {
 
     }
+
+    if (env('APP_DEBUG')) {
+        $cache = base_path('runtime', 'cache');
+        `rm -rf $cache`;
+    }
+
     $total = microtime(true) - START_TIME;
     header('X-Exec-Time:'.$total);
     foreach ([

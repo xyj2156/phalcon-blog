@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 
 use App\Library\Paginator\Pager;
 use App\Model\Services\Service\TaxonomyService;
+use App\Model\TermRelationships;
+use App\Model\Terms;
 use App\Model\TermTaxonomy;
 use Phalcon\Http\Response;
 use Phalcon\Http\ResponseInterface;
@@ -54,7 +56,7 @@ class TaxonomyController extends AdminBase
                     ]
                 ),
                 [
-                    'layoutClass' => 'ZPhal\Modules\Admin\Library\Paginator\Pager\Layout\Bootstrap', // 样式类
+                    'layoutClass' => Pager\Layout\Bootstrap::class, // 样式类
                     'rangeLength' => 5, // 分页长度
                     'urlMask'     => '?page={%page_number}', // 额外url传参
                 ]
@@ -94,7 +96,7 @@ class TaxonomyController extends AdminBase
                 ),
                 [
                     // We will use Bootstrap framework styles
-                    'layoutClass' => 'ZPhal\Modules\Admin\Library\Paginator\Pager\Layout\Bootstrap',
+                    'layoutClass' => Pager\Layout\Bootstrap::class,
                     // Range window will be 5 pages
                     'rangeLength' => 5,
                     // Just a string with URL mask
@@ -132,7 +134,7 @@ class TaxonomyController extends AdminBase
                 ),
                 [
                     // We will use Bootstrap framework styles
-                    'layoutClass' => 'ZPhal\Modules\Admin\Library\Paginator\Pager\Layout\Bootstrap',
+                    'layoutClass' => Pager\Layout\Bootstrap::class,
                     // Range window will be 5 pages
                     'rangeLength' => 5,
                     // Just a string with URL mask
