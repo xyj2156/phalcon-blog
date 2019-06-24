@@ -1,5 +1,5 @@
 <!-- 页头 -->
-{{ partial('layouts/content_header', ['_1title' : '编辑页面','_2title':'固定链接：<span id="postUrl">'~info['guid']|default('')~'</span>']) }}
+{{ partial('layouts/content_header', ['_1title' : '编辑页面','_2title':'固定链接：<span id="postUrl">'~info['guid']|default('暂无')~'</span>']) }}
 
 
 <!-- 主内容 -->

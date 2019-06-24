@@ -1,30 +1,23 @@
 <!-- 页头 -->
-<section class="content-header">
-    <div class="msgTip col-md-12">
-        <div class="row">
-            <?php $this->flash->output(); ?>
-        </div>
-    </div>
-    <h1>
-        编辑文章
-        <small>固定链接：<span id="postUrl"><?= $info['guid'] ?></span></small>
-    </h1>
-</section>
+{{ partial('layouts/content_header', ['_1title' : '编辑文章','_2title':'固定链接：<span id="postUrl">'~info['guid']|default('')~'</span>']) }}
+
 
 <!-- 主内容 -->
 <section class="content">
     <div class="row">
-        <form action="<?= $this->url->get("admin/post/update"); ?>" method="post">
+        <form action="{{ url.get(info is defined ? 'admin/post/update.html' : 'admin/post/save.html') }}" method="post">
             <div class="form-group col-md-12">
                 <input class="form-control" id="title" type="text" name="title" placeholder="输入标题"
-                       value="<?= $info['post_title'] ?>">
-                <input type="hidden" id="post_id" name="post_id" value="<?= $info['ID'] ?>">
+                       value="{{ info['post_title']|default('') }}">
+                {% if info is defined %}
+                    <input type="hidden" id="post_id" name="post_id" value="{{ info['ID'] }}">
+                {% endif %}
             </div>
 
             <div class="form-group col-md-12">
                 <div id="editormd" class="editormd">
                     <textarea class="editormd-markdown-textarea"
-                              name="editormd-markdown-doc"><?= $info['post_content'] ?></textarea>
+                              name="editormd-markdown-doc">{{ info['post_content']|default('') }}</textarea>
 
                     <textarea class="editormd-html-textarea" name="editormd-html-code"></textarea>
                 </div>
@@ -33,7 +26,7 @@
             <div class="form-group col-md-12">
                 <label>Description</label>
                 <textarea class="form-control" rows="3" name="description"
-                          placeholder="概述"><?= $description ?></textarea>
+                          placeholder="概述">{{ description|default('') }}</textarea>
             </div>
 
             <div class="col-md-12">
@@ -56,19 +49,21 @@
                                         <div class="row">
                                             <div class="form-group col-md-12">
                                                 <i class="fa fa-map-pin"></i>&nbsp;状态：&nbsp;
-                                                <?php if ($info['post_status'] == 'publish') { ?>
-                                                    <b id="nowStatusStr">已发布</b>&nbsp;<a href="javascript:void(0)"
-                                                                                         id="changeStatus">编辑</a>
-                                                <?php } elseif ($info['post_status'] == 'draft') { ?>
+                                                {% if info is defined and info['post_status'] == 'publish' %}
+                                                    <b id="nowStatusStr">已发布</b>
+                                                    <a href="javascript:void(0)" id="changeStatus">编辑</a>
+                                                {% else %}
+                                                    {#                                                     elseif ($info['post_status'] == 'draft') {#}
                                                     <b>草稿</b>
-                                                <?php } ?>
+                                                {% endif %}
 
                                                 <input type="hidden" name="now_status" id="now_status"
-                                                       value="<?= $info['post_status'] ?>">
-                                                <input type="hidden" id="post_date" value="<?= $info['post_date'] ?>">
+                                                       value="{{ info['post_status']|default('') }}">
+                                                <input type="hidden" id="post_date"
+                                                       value="{{ info['post_date']|default('') }}">
                                             </div>
 
-                                            <?php if ($info['post_status'] == 'publish') { ?>
+                                            {% if info is defined and info['post_status'] == 'publish' %}
                                                 <div class="form-group col-md-12" id="selectStatus"
                                                      style="display: none;">
                                                     <select class="input-sm" name="change_status" id="change_status">
@@ -81,7 +76,7 @@
                                                     <a href="javascript:void(0)" id="cancelChangeStatus"
                                                        class="btn btn-default btn-sm">取消</a>
                                                 </div>
-                                            <?php } ?>
+                                            {% endif %}
 
                                             <div class="form-group col-md-12">
                                                 <!--TODO-->
@@ -95,14 +90,21 @@
                                             <div class="form-group col-md-12">
                                                 <i class="fa fa-comment-o"></i>&nbsp;开启评论：&nbsp;
                                                 <label>
-                                                    <input type="radio" name="ifComment"
-                                                           value="yes" <?php if ($info['comment_status'] == 'open') echo 'checked' ?>>
+                                                    <input type="radio"
+                                                           name="ifComment"
+                                                           value="yes"
+                                                           {% if info is not defined %}checked{% endif %}
+                                                            {% if info is defined and info['comment_status'] == 'open' %}checked{% endif %}
+                                                    >
                                                     是
                                                 </label>
                                                 &nbsp;&nbsp;
                                                 <label>
-                                                    <input type="radio" name="ifComment"
-                                                           value="no" <?php if ($info['comment_status'] == 'closed') echo 'checked' ?>>
+                                                    <input type="radio"
+                                                           name="ifComment"
+                                                           value="no"
+                                                           {% if info is defined and info['comment_status'] == 'closed' %}checked{% endif %}
+                                                    >
                                                     否
                                                 </label>
                                             </div>
@@ -122,90 +124,85 @@
                                                 <i class="fa fa-calendar-check-o"></i>&nbsp;发布时间：&nbsp;
 
                                                 <b id="timestamp">
-                                                    <?php if ($info['post_date'] != '1000-01-01 00:00:00') { ?>
-                                                        <b>发布于 <?= $info['post_date'] ?></b>
-                                                    <?php } else { ?>
+                                                    {% if info is defined and info['post_date'] != '1000-01-01 00:00:00' %}
+                                                        <b>发布于 {{ info['post_date'] }}</b>
+                                                    {% else %}
                                                         <b>立即发布</b>
-                                                    <?php } ?>
+                                                    {% endif %}
                                                 </b>&nbsp;&nbsp;
                                                 <a href="javascript:void(0)" id="editTimestamp">编辑</a>
                                             </div>
 
                                             <div class="form-group col-md-12" id="timestampDiv" style="display: none;">
                                                 <label><i class="fa fa-calendar-plus-o"></i>&nbsp;日期和时间</label>
-                                                <?php if ($info['post_status'] == 'draft' && $info['post_date'] == '1000-01-01 00:00:00') { ?>
+                                                {% if info is defined and info['post_status'] == 'draft' and info['post_date'] == '1000-01-01 00:00:00' %}
                                                     <input type="hidden" id="publishDate" name="publishDate"
                                                            value="now">
-                                                <?php } else { ?>
+                                                {% else %}
                                                     <input type="hidden" id="publishDate" name="publishDate"
                                                            value="edit">
-                                                <?php } ?>
+                                                {% endif %}
                                                 <fieldset>
                                                     <div class="timestamp-wrap">
                                                         <label>
                                                             <input type="text" class="form-control input-sm" id="year"
-                                                                   name="year" value="<?= $publishDatetime['year'] ?>"
-                                                                   size="3" maxlength="4" autocomplete="off">
+                                                                   name="year"
+                                                                   value="{{ publishDatetime['year']|default('') }}"
+                                                                   size="3" maxlength="3" autocomplete="off">
                                                         </label>
                                                         -
                                                         <label>
                                                             <select id="month" name="month"
                                                                     class="form-control input-sm">
-                                                                <?php
-                                                                for ($i = 1; $i <= 12; $i++) { ?>
-                                                                    <option value="<?php
-                                                                    if ($i < 10) {
-                                                                        echo '0'.$i;
-                                                                    } else {
-                                                                        echo $i;
-                                                                    }
-                                                                    ?>" data-text="<?= $i ?>月"
-                                                                        <?php if ($i == $publishDatetime['month']) echo "selected" ?> ><?= $i ?>
-                                                                        月
+                                                                {% for i in 1..12 %}
+                                                                    <option value="{{ i < 10 ? '0'~i : i }}"
+                                                                            data-text="{{ i }}月"
+                                                                            {% if publishDatetime is defined and i == publishDatetime['month'] %}selected{% endif %}
+                                                                    >{{ i }}月
                                                                     </option>
-                                                                <?php } ?>
+                                                                {% endfor %}
                                                             </select>
                                                         </label>
                                                         -
                                                         <label>
                                                             <input type="text" id="day" name="day"
-                                                                   value="<?= $publishDatetime['day'] ?>"
+                                                                   value="{{ publishDatetime['day']|default('') }}"
                                                                    class="form-control input-sm" size="2" maxlength="2"
                                                                    autocomplete="off">
                                                         </label>
                                                         &nbsp;@&nbsp;
                                                         <label>
                                                             <input type="text" id="hour" name="hour"
-                                                                   value="<?= $publishDatetime['hour'] ?>"
+                                                                   value="{{ publishDatetime['hour']|default('') }}"
                                                                    class="form-control input-sm" size="2" maxlength="2"
                                                                    autocomplete="off">
                                                         </label>
                                                         :
                                                         <label>
                                                             <input type="text" id="minute" name="minute"
-                                                                   value="<?= $publishDatetime['minute'] ?>"
+                                                                   value="{{ publishDatetime['minute']|default('') }}"
                                                                    class="form-control input-sm" size="2" maxlength="2"
                                                                    autocomplete="off">
                                                         </label>
                                                     </div>
 
                                                     <input type="hidden" id="second" name="second"
-                                                           value="<?= $publishDatetime['second'] ?>">
+                                                           value="{{ publishDatetime['second']|default('') }}">
 
                                                     <input type="hidden" id="hidden_year" name="hidden_year"
-                                                           value="<?= $publishDatetime['year'] ?>">
+                                                           value="{{ publishDatetime['year']|default('') }}">
                                                     <input type="hidden" id="cur_year" name="cur_year">
                                                     <input type="hidden" id="hidden_month" name="hidden_month"
-                                                           value="<?= $publishDatetime['month'] ?>">
+                                                           value="{{ publishDatetime['month']|default('') }}">
                                                     <input type="hidden" id="cur_month" name="cur_month">
                                                     <input type="hidden" id="hidden_day" name="hidden_day"
-                                                           value="<?= $publishDatetime['day'] ?>">
+                                                           value="{{ publishDatetime['day']|default('') }}">
                                                     <input type="hidden" id="cur_day" name="cur_day">
                                                     <input type="hidden" id="hidden_hour" name="hidden_hour"
-                                                           value="<?= $publishDatetime['hour'] ?>">
+                                                           value="{{ publishDatetime['hour']|default('') }}">
                                                     <input type="hidden" id="cur_hour" name="cur_hour">
                                                     <input type="hidden" id="hidden_minute" name="hidden_minute"
-                                                           value="<?= $publishDatetime['minute'] ?>">
+                                                           value="{{ publishDatetime['minute']|default('') }}">
                                                     <input type="hidden" id="cur_minute" name="cur_minute">
                                                     <p>
                                                         <a href="javascript:void(0)" id="saveTimestamp"
@@ -221,51 +218,61 @@
 
                                     <div class="box-footer">
                                         <input type="hidden" id="ajaxUri" value="<?= $ajaxUri ?>">
-
-                                        <a class="btn btn-sm btn-danger" data-toggle="modal" data-target="#trash_modal"><i
-                                                    class="fa fa-trash-o"></i> 移到回收站</a>
-                                        <?php if ($info['post_status'] == 'publish') { ?>
-
-                                            <button type="submit" name="submitWay" value="publish"
-                                                    class="btn btn-info pull-right">更新
+                                        {% if info is defined %}
+                                            <a class="btn btn-sm btn-danger"
+                                               data-toggle="modal"
+                                               data-target="#trash_modal">
+                                                <i class="fa fa-trash-o"></i>
+                                                移到回收站
+                                            </a>
+                                        {% endif %}
+                                        {% if info is defined and info['post_status'] == 'publish' %}
+                                            <button type="submit"
+                                                    name="submitWay"
+                                                    value="publish"
+                                                    class="btn btn-info pull-right">
+                                                更新
                                             </button>
-                                        <?php } elseif ($info['post_status'] == 'draft') { ?>
-
+                                        {% elseif info is not defined or info['post_status'] == 'draft' %}
                                             <div class="pull-right">
-                                                <button type="submit" name="submitWay" value="draft"
-                                                        class="btn btn-default">保存草稿
+                                                <button type="submit" name="submitWay"
+                                                        value="draft"
+                                                        class="btn btn-default">
+                                                    保存草稿
                                                 </button>
-                                                <button type="submit" name="submitWay" value="publish"
-                                                        class="btn btn-info">发布
+                                                <button type="submit" name="submitWay"
+                                                        value="publish"
+                                                        class="btn btn-info">
+                                                    发布
                                                 </button>
                                             </div>
-                                        <?php } ?>
+                                        {% endif %}
 
                                         <p class="margin pull-right" id="autoDraftTps" style="display: none;"></p>
-
-                                        <div class="modal modal-danger fade" id="trash_modal">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">移到回收站</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>确定要移到回收站吗？</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline pull-left"
-                                                                data-dismiss="modal">取消
-                                                        </button>
-                                                        <a href="<?= $this->url->get([
-                                                            "for" => "trash-post", "id" => $info['ID'],
-                                                        ]); ?>" type="button" class="btn btn-outline">确定</a>
+                                        {% if info is defined %}
+                                            <div class="modal modal-danger fade" id="trash_modal">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span></button>
+                                                            <h4 class="modal-title">移到回收站</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>确定要移到回收站吗？</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline pull-left"
+                                                                    data-dismiss="modal">取消
+                                                            </button>
+                                                            <a href="{{ url.get({'for':'trash-post','id':info['ID']}) }}"
+                                                               type="button" class="btn btn-outline">确定</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -361,7 +368,7 @@
                                                 <select class="form-control select2" id="tagsList" name="tags[]"
                                                         multiple="multiple" data-placeholder="选择标签"
                                                         style="width: 100%;">
-                                                    <?= $tagsTree ?>
+                                                    {{ tagsTree|default('') }}
                                                 </select>
                                             </div>
                                         </div>
@@ -413,7 +420,7 @@
                                         <div class="form-group col-md-12">
                                             <label for="imageUrl">图片地址</label>
                                             <input type="text" name="cover_image" class="form-control" id="imageUrl"
-                                                   placeholder="url" value="<?= $info['cover_picture'] ?>">
+                                                   placeholder="url" value="{{ info['cover_picture']|default('') }}">
                                         </div>
 
                                         <div class="form-group col-md-12" id="imagePreview">
