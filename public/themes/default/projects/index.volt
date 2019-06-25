@@ -1,7 +1,7 @@
 {% if ifShow is not empty %}
     {% if showRepos is not empty %}
         <div class="card-columns project-card-columns">
-            {% for repo in shiwRepos %}
+            {% for repo in showRepos %}
                 <div class="card project-card rounded-0 border-0">
                     <div class="card-body project-body">
                         <p class="card-title project-title">

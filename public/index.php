@@ -35,7 +35,8 @@ try {
         /** @noinspection PhpUnhandledExceptionInspection */
         throw $exception;
     }
-    header('location:/error/route500.html');
+    http_response_code(500);
+    echo '<center style="margin: 100px auto;font-size: 40px">服务器暂时无法处理您的请求</center>';
     try {
         /** @var Adapter $logger */
         $logger = container('logger');
