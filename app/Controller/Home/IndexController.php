@@ -62,8 +62,8 @@ class IndexController extends HomeBase
                 ->createBuilder()
                 ->from(['p' => Posts::class])
                 ->groupBy("p.ID")
-                ->join(TermRelationships::class, 'tr.object_id = p.ID', 'tr')
-                ->join(TermTaxonomy::class,
+                ->leftJoin(TermRelationships::class, 'tr.object_id = p.ID', 'tr')
+                ->leftJoin(TermTaxonomy::class,
                     "tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.taxonomy = ('category' or 'tag')", "tt")
                 ->columns([
                     'p.ID as post_id',

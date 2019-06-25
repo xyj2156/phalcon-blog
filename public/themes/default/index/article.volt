@@ -3,7 +3,7 @@
         {% for post in posts %}
             {% if post.cover_picture is not empty %}
                 <div class="article-card article-img-card col-12 p-3"
-                     onclick="window.open('{{ post.post_url }}', '_self')">
+                     onclick="window.open('{{ url.get('alias/'~post.post_url) }}.html', '_self')">
                     <div class="article-card-body">
                         <div class=
                              "row no-gutters">
@@ -18,7 +18,7 @@
                             </div>
                             <div class="article-card-body col-xs-12 col-md-9 m-auto">
                                 <h4 class="card-title mb-2">
-                                    <a href="{{ post.post_url }}">{{ post.post_title }}</a>
+                                    <a href="{{ url.get('/article/'~post.post_id) }}.html{#{{ post.post_url }}#}">{{ post.post_title }}</a>
                                 </h4>
 
                                 <p class="card-subtitle mb-2 text-muted">
@@ -58,10 +58,10 @@
                 </div>
             {% else %}
                 <div class="article-card article-word-card col-12 p-3"
-                     onclick="window.open('{{ post.post_url }}', '_self')">
+                     onclick="window.open('{{ url.get('alias/'~post.post_url) }}.html', '_self')">
                     <div class="article-card-body">
                         <h4 class="card-title mb-2">
-                            <a href="{{ post.post_url }}">{{ post.post_title }}</a>
+                            <a href="{{ url.get('article/'~post.post_id) }}.html{#{{ post.post_url }}#}">{{ post.post_title }}</a>
                         </h4>
                         <p class="card-subtitle mb-2 text-muted">
                             <i class="fa fa-calendar-check-o"></i> {{ post.post_date }}

@@ -8,6 +8,8 @@
     {{ get_title() }}
     <meta name="description" content="{{ coverDescription|default(siteDescription) }}">
     <meta name="keywords" content="{{ coverKeywords|default(siteKeywords) }}"/>
+    <meta name="author" content="Jason">
+    <meta name="email" content="xyj418@163.com,506907958@qq.com">
     {{ tag.tagHtml('link', {'rel':'icon', 'href':'/favicon.ico'}) }}
     <!-- 静态资源开始 -->
     {{ assets.outputCss() }}

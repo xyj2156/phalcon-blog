@@ -49,6 +49,12 @@ $router->add("/article/{id:[0-9]+}", [
     "id"         => 1,
 ])->setName('article');
 
+$router->add("/alias/{slug:[\w]+}", [
+    'controller' => 'articles',
+    'action'     => 'slug',
+    "slug"       => 1,
+])->setName('article');
+
 $router->add("/subject/:params", [
     'controller' => 'subjects',
     'action'     => 'subject',

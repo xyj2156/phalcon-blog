@@ -26,6 +26,7 @@ return [
             'host'       => env('REDIS_HOST', '127.0.0.1'), // 如用docker,对应redis的hostname
             'port'       => env('REDIS_PORT', 6379),
             'index'      => env('REDIS_INDEX', 0),
+            'auth'       => env('REDIS_AUTH', ''),
             'persistent' => true,
         ],
     ],
