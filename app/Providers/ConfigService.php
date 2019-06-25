@@ -44,9 +44,6 @@ class ConfigService extends AbstractServiceProvider
             }
             /** @noinspection PhpIncludeInspection */
             $ret = include $filePath;
-            if (!$ret) {
-                continue;
-            }
             $all[$fileInfo['filename']] = $ret;
         }
         return new Config($all);

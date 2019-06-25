@@ -7,28 +7,24 @@
 
 // 用于展示总体执行时间
 header_register_callback(function () {
-    try {
 //    日志事务提交
-        container('logger')->commit();
-    } catch (\Exception $exception) {
-
-    }
+    container('logger')->commit();
 
     if (env('APP_DEBUG')) {
         $cache = base_path('runtime', 'cache');
         `rm -rf $cache`;
     }
 
-    $total = microtime(true) - START_TIME;
-    header('X-Exec-Time:'.$total);
     foreach ([
                  'X-Powered-By',
                  'Server',
              ] as $item) {
         $_item = 'HEADER_'.strtoupper($item);
-        $x_powered_by = env($_item, null);
-        $x_powered_by && header("{$item}: {$x_powered_by}");
+        $val = env($_item, null);
+        $val && header("{$item}: {$val}");
     }
+    $total = microtime(true) - START_TIME;
+    header('X-Exec-Time:'.$total);
 });
 
 /** @noinspection PhpIncludeInspection */
@@ -40,4 +36,3 @@ foreach ($services as $class) {
     unset($class);
 }
 
-$logger = $di->getLogger();
