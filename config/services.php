@@ -8,6 +8,7 @@
 
 return [
     \App\Providers\ConfigService::class,
+    \App\Providers\LoggerService::class,
     \App\Providers\ModelsMateDataService::class,
     \App\Providers\ModelsCacheService::class,
     \App\Providers\DBService::class,
@@ -26,5 +27,4 @@ return [
     \App\Providers\WidgetService::class,
     \App\Providers\OptionService::class,
     \App\Providers\VisitCounterService::class,
-    \App\Providers\LoggerService::class,
 ];

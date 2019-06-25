@@ -16,6 +16,7 @@ return [
             'port'       => env('REDIS_PORT', 6379),
             'index'      => env('REDIS_INDEX', 0),
             'persistent' => true,
+            'auth'       => env('REDIS_AUTH', ''),
         ],
 
         'file' => [

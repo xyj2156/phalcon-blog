@@ -35,9 +35,14 @@ try {
         /** @noinspection PhpUnhandledExceptionInspection */
         throw $exception;
     }
-    /** @var Adapter $logger */
-    $logger = container()->get('logger');
-    $logger->error($exception->getMessage());
-    $logger->error($exception->getTraceAsString());
     header('location:/error/route500.html');
+    try {
+        /** @var Adapter $logger */
+        $logger = container('logger');
+        $logger->error($exception->getMessage());
+        $logger->error($exception->getTraceAsString());
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+        echo '<pre>', $exception->getTraceAsString(), '</pre>';
+    }
 }

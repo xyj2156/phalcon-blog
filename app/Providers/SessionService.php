@@ -39,6 +39,10 @@ class SessionService extends AbstractServiceProvider
             'uniqueId' => $config->uniqueId,
             'lifetime' => $config->lifetime,
         ];
+//        添加如果redis 有密码的情况
+        if (!empty($driver->auth)) {
+            $defaults['auth'] = $driver->auth;
+        }
 
         /** @var AdapterInterface $session */
         $session = new $adapter(array_merge($driver->toArray(), $defaults));

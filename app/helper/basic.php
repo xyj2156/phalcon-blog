@@ -80,14 +80,14 @@ if (!function_exists('container')) {
     {
         $default = Di::getDefault();
 
+        if (!$default) {
+            trigger_error('无法解析依赖项注入容器，可能是前面没有进行实例化过。', E_USER_ERROR);
+        }
+
         $args = func_get_args();
 
         if (empty($args)) {
             return $default;
-        }
-
-        if (!$default) {
-            trigger_error('无法解析依赖项注入容器，可能是前面没有进行实例化过。', E_USER_ERROR);
         }
 
         return call_user_func_array([$default, 'getShared'], $args);
