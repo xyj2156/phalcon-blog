@@ -36,7 +36,6 @@ return [
                 'taxonomy',
             ],
             '_type'      => [
-                '',
                 'category',
                 'tag',
             ],
@@ -260,21 +259,21 @@ return [
                 ],
                 [
                     'name'       => '媒体',
-                    'target'     => '/adnmin/setting/media.html',
+                    'target'     => '/admin/setting/media.html',
                     'controller' => 'setting',
                     'action'     => 'media',
                     'icon'       => 'fa-circle-o',
                 ],
                 [
                     'name'       => '固定连接',
-                    'target'     => '/adnmin/setting/permalink.html',
+                    'target'     => '/admin/setting/permalink.html',
                     'controller' => 'setting',
                     'action'     => 'permalink',
                     'icon'       => 'fa-circle-o',
                 ],
                 [
                     'name'       => '作品',
-                    'target'     => '/adnmin/setting/project.html',
+                    'target'     => '/admin/setting/project.html',
                     'controller' => 'setting',
                     'action'     => 'project',
                     'icon'       => 'fa-github',

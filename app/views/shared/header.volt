@@ -44,7 +44,16 @@
             {% for menu in config.admin.menu %}
                 {% switch menu.type %}
                 {% case 2 %}
-                    <li class="treeview {% if controllerName in menu.controller.toArray() %}{% if (menu._type is empty) or ( type is defined and (menu._type|length) and (type in menu._type.toArray())) %}active{% endif %}{% endif %}">
+                    <li class="treeview
+                    {% if controllerName in menu.controller.toArray() %}
+                        {% if type is defined and menu._type is not empty %}
+                            {% if type in menu._type.toArray() %}
+                                active
+                            {% endif %}
+                        {% else %}
+                            active
+                        {% endif %}
+                    {% endif %}">
                         <a href="#">
                             <i class="fa {{ menu.icon }}"></i> <span>{{ menu.name }}</span>
                             <span class="pull-right-container">
@@ -53,7 +62,7 @@
                         </a>
                         <ul class="treeview-menu">
                             {% for children in menu.target %}
-                                <li {% if children.controller == controllerName and children.action == actionName %} {% if children.type is empty or type == children.typ %}class="active"{% endif %} {% endif %}>
+                                <li {% if children.controller == controllerName and children.action == actionName %} {% if children.type is empty or type == children.type %}class="active"{% endif %} {% endif %}>
                                     <a href="{{ url.get(children.target) }}"><i
                                                 class="fa {{ children.icon }}"></i> {{ children.name }}
                                     </a>

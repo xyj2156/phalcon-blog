@@ -1,15 +1,6 @@
 <!-- 页头 -->
-<section class="content-header">
-    <div class="msgTip col-md-12">
-        <div class="row">
-            <?php $this->flash->output(); ?>
-        </div>
-    </div>
-    <h1>
-        专题管理
-        <small>专题是文章、页面等的整合板块</small>
-    </h1>
-</section>
+{{ partial('layouts/content_header', {'_1title':'专题管理','_2title':'专题是文章、页面等的整合板块'}) }}
+
 
 <section class="content">
     <div class="row">
@@ -31,35 +22,23 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <?php if (count($pager) == 0) { ?>
+                        {% if pager|length == 0 %}
                             <tr align="center">
                                 <td colspan="4"> 暂无数据</td>
                             </tr>
-                        <?php } else {
-                            foreach ($pager->getIterator() as $item) {
-                                echo $item['html'];
-                            }
-                        }
-                        ?>
+                        {% else %}
+                            {% for item in pager.getIterator() %}
+                                {{ item['html'] }}
+                            {% endfor %}
+                        {% endif %}
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>名称</th>
-                            <th>描述</th>
-                            <th>别名</th>
-                            <th>上次更新</th>
-                            <th>总数</th>
-                        </tr>
-                        </tfoot>
                     </table>
                 </div>
 
                 <div class="box-footer clearfix">
-                    <?php
-                    if ($pager->haveToPaginate()) {
-                        echo $pager->getLayout();
-                    }
-                    ?>
+                    {% if pager.haveToPaginate() %}
+                        {{ pager.getLayout() }}
+                    {% endif %}
                 </div>
             </div>
         </div>
