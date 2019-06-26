@@ -14,6 +14,8 @@ use Phalcon\Http\ResponseInterface;
 
 abstract class AdminBase extends ControllerBase
 {
+    protected $notMethodRedirect = '/admin.html';
+
     public function onConstruct ()
     {
         parent::onConstruct();
