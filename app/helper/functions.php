@@ -176,7 +176,7 @@ if (!function_exists('subjectTreeHtml')) {
             $lastUpdated = $treeItem["last_updated"] == '1000-01-01 00:00:00' ? '暂无更新' : $treeItem["last_updated"];
 
             $output[] = [
-                'id' => $treeItem["subject_id"],
+                'id'   => $treeItem["subject_id"],
                 'html' => '<tr>
                                 <td><a href="'.$link.'">'.$tags.$treeItem["subject_name"].'</a></td>
                                 <td>'.$treeItem["subject_description"].'</td>
@@ -271,5 +271,26 @@ if (!function_exists('calculateDateDiff')) {
         } else {
             return $second." 秒前";
         }
+    }
+}
+if (!function_exists('random_str')) {
+    /**
+     * 计算时间差
+     *
+     * @param  int  $length
+     * @param  string  $suffix
+     *
+     * @return string
+     */
+    function random_str ($length = 32, $suffix = '')
+    {
+        $str = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm';
+        $ret = '';
+
+        for ($i = 0; $i < $length; ++$i) {
+            $_tmp = str_shuffle($str);
+            $ret .= $_tmp[0];
+        }
+        return $ret.$suffix;
     }
 }

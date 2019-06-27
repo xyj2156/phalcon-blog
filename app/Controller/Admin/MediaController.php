@@ -35,8 +35,8 @@ class MediaController extends AdminBase
 
         $_resources = $this->modelsManager->createBuilder()
                                           ->columns([
-                                             "resource_id", "upload_date", "resource_title", "guid", "resource_type",
-                                         ])
+                                              "resource_id", "upload_date", "resource_title", "guid", "resource_type",
+                                          ])
                                           ->from(Resources::class)
                                           ->where("upload_author = {$userId}")
                                           ->orderBy("resource_id DESC")
@@ -80,16 +80,19 @@ class MediaController extends AdminBase
      */
     public function uploadAction ()
     {
-        // 检测是否上传文件
-        if ($this->request->hasFiles()) {
-            $files = $this->request->getUploadedFiles(); // 获取上传的文件
-            /** @var Media $media */
-            $media = $this->di->get('mediaUpload');
+        if (!$this->request->hasFiles()) {
+            return $this->response->setJsonContent([
+                'status'  => 400,
+                'message' => '没有文件被上传',
+            ]);
+        }
+        $files = $this->request->getUploadedFiles(); // 获取上传的文件
+        /** @var Media $media */
+        $media = $this->di->get('mediaUpload');
 
-            foreach ($files as $file) {
-                $upload = $media->uploadMedia($file, 'resource');
-                return json_encode([$upload['status'] => $upload['message']]);
-            }
+        foreach ($files as $file) {
+            $upload = $media->uploadMedia($file, 'resource');
+            return json_encode([$upload['status'] => $upload['message']]);
         }
     }
 }

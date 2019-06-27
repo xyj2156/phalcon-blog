@@ -2,10 +2,10 @@
 
 namespace App\Plugin;
 
-use Phalcon\Di;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\EventsAwareInterface;
 use App\Model\Resources;
+use Phalcon\Http\Request\File;
 
 class Media implements EventsAwareInterface
 {
@@ -25,7 +25,7 @@ class Media implements EventsAwareInterface
     /**
      * 上传文件
      *
-     * @param $file
+     * @param  File  $file
      * @param  string  $uploadType  上传类型(决定路径) resource|cover
      * @param  array  $extra  额外参数
      *
@@ -37,84 +37,59 @@ class Media implements EventsAwareInterface
             $this->_eventsManager->fire("media:beforeUploadMedia", $this, $file);
         }
 
+//        配置信息
+        $config = container('config');
+        $mediaConf = $config->media;
+        $uploadTypeConfig = $mediaConf->upload_type;
+
+        if (!isset($uploadTypeConfig->{$uploadType})) {
+            return $this->uploadStatus(403, '上传类型错误');
+        }
+//        组合路径信息
+        $uploadBaseDir = $mediaConf->upload_basedir; // 上传路径
+        $saveDir = $uploadTypeConfig->{$uploadType}.'/'.date('Ymd');
+        $finalSaveDir = "{$uploadBaseDir}/{$saveDir}";
+        $finalUrl = str_replace(base_path('public'), '', $finalSaveDir);
+
+        if (!file_exists($finalSaveDir)) {
+            @mkdir($finalSaveDir, 0777, true);
+        }
 
         /**
          * 文件上传操作
          */
-        $output = [];
         $fileInfo = [];
-        $config = Di::getDefault()->getConfig();
-        $uploadBaseDir = $config->application->uploadDir; // 上传路径
-
-        if (!file_exists($uploadBaseDir)) {
-            mkdir($uploadBaseDir, 0777);
-        }
-
-        if ($uploadType == 'resource') {
-            // 当前时间
-            $now = time();
-            $year = date('Y', $now);
-            $month = date('m', $now);
-
-            if (!file_exists($uploadBaseDir.$year)) {
-                mkdir($uploadBaseDir.$year, 0777);
-            }
-
-            if (!file_exists($uploadBaseDir.$year.'/'.$month)) {
-                mkdir($uploadBaseDir.$year.'/'.$month, 0777);
-            }
-
-            $uploadDir = $uploadBaseDir.$year.'/'.$month.'/';
-            $dir = 'uploads/'.$year.'/'.$month.'/';
-
-        } elseif ($uploadType == 'cover') {
-            $uploadDir = $uploadBaseDir.'cover/';
-
-            if (!file_exists($uploadDir)) {
-                mkdir($uploadDir, 0777);
-            }
-
-            $dir = 'uploads/cover/';
-
-        } else {
-            return $this->uploadStatus('error', '错误的上传类型！');
-        }
 
         // 文件信息
-        $fileInfo['filename'] = $file->getName();
-        $fileInfo['filesize'] = $file->getSize();
-        $fileInfo['filetype'] = $file->getType();
-        $fileInfo['url'] = $dir.$fileInfo['filename'];
+        $fileInfo['fileTitle'] = $file->getName();
+        $fileInfo['fileSize'] = $file->getSize();
+        $fileInfo['fileType'] = $file->getType();
+        $fileInfo['filename'] = random_str(12, '.'.$file->getExtension());
+        $fileInfo['url'] = $finalUrl.'/'.$fileInfo['fileTitle'];
 
-        $newFile = $uploadDir.$fileInfo['filename'];
+//        执行上传文件
+        $newFile = $finalSaveDir.'/'.$fileInfo['fileTitle'];
         if (is_file($newFile)) {
             return $this->uploadStatus('error', '文件已存在！');
         }
+        if (!$file->moveTo($newFile)) {
+            $error = $file->getError();
+            return $this->uploadStatus('error', '文件保存失败：'.$error);
+        }
 
-        // 保存文件
-        if ($file->moveTo($newFile)) {
-
-            /**
-             * 存储到数据库
-             */
-            $save = $this->saveInfo($fileInfo);
-
-            if ($save === true) {
-                $output = $this->uploadStatus('success', '上传成功！', $fileInfo);
-            } else {
-                $output = $this->uploadStatus('error', $save);
-            }
-
-        } else {
-            $error = $file->getError;
-            $output = $this->uploadStatus('error', '文件保存失败：'.$error);
+        /**
+         * 存储到数据库
+         */
+        $save = $this->saveInfo($fileInfo);
+        if ($save !== true) {
+            return $this->uploadStatus('error', $save);
         }
 
         if (is_object($this->_eventsManager)) {
             $this->_eventsManager->fire("media:afterUploadMedia", $this, $file);
         }
 
-        return $output;
+        return $this->uploadStatus('success', '上传成功！', $fileInfo);
     }
 
     /**
@@ -130,13 +105,13 @@ class Media implements EventsAwareInterface
 
         $resource->upload_date = date('Y-m-d H:i:s', time());
         $resource->upload_date_gmt = gmdate('Y-m-d H:i:s', time());
-        $resource->resource_title = $fileInfo['filename'];
+        $resource->resource_title = $fileInfo['fileTitle'];
         $resource->resource_name = $fileInfo['filename'];
         $resource->resource_parent = 0;
         $resource->guid = $fileInfo['url'];
 
         //$resource->resource_type
-        $resource->resource_mime_type = $fileInfo['filetype'];
+        $resource->resource_mime_type = $fileInfo['fileType'];
 
 
         // TODO 读取配置,是否裁剪图片
@@ -160,6 +135,7 @@ class Media implements EventsAwareInterface
      *
      * @param $status
      * @param $message
+     * @param  array  $data
      *
      * @return array
      */
