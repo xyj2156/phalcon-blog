@@ -94,3 +94,5 @@ $router->add('/register', [
     'action'     => 'register',
 ])->setName('admin-login');
 
+$router->add('/search', 'index::search');
+

@@ -27,7 +27,7 @@
         <div class="collapse navbar-collapse col-md-10" id="navbarNavDropdown">
             {{ partial('shared/nav') }}
         </div>
-        <form class="form-inline">
+        <form class="form-inline" action="{{ url.get('/search.html') }}" method="GET">
             <div class="navbar-search input-group-sm input-group">
                 <input type="text" class="form-control" placeholder="查找..." aria-label="搜索">
                 <span class="input-group-append">

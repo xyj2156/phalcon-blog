@@ -51,9 +51,47 @@ class IndexController extends HomeBase
         $this->tag->prependTitle($this->option->get('blogname')." - ");
         $this->tag->setTitle($this->option->get('blogdescription'));
 
-        $nowPage = $this->request->getQuery('page', 'int', 1);
+        $viewCacheKey = 'index-article-list-page-';
+        $this->getArticle($viewCacheKey);
+    }
 
-        if (!$this->view->getCache()->exists('index-article-list-page-'.$nowPage)) {
+    /**
+     * list for page
+     * 展示页面
+     */
+    public function pageAction ($id)
+    {
+        $this->tag->prependTitle($this->option->get('blogname')." - ");
+        $this->tag->setTitle($this->option->get('blogdescription'));
+
+        echo "page id = ".$id;
+    }
+
+    public function searchAction ()
+    {
+        $this->tag->prependTitle(implode('', [
+            $this->option->get('blogname'),
+            ' - ',
+        ]));
+        $this->tag->setTitle($this->option->get('blogdescription'));
+
+        $viewCacheKey = 'search-article-list-page-';
+        $this->view->pick('index/article');
+        $this->getArticle($viewCacheKey);
+    }
+
+    protected function getArticle ($cacheKey)
+    {
+        $nowPage = $this->request->getQuery('page', 'int', 1);
+        $isSearch = $this->router->getActionName() === 'search';
+        if ($isSearch) {
+            $search = $this->request->getQuery('search', 'string', '');
+            if ($search) {
+                $cacheKey .= $search;
+            }
+        }
+
+        if (!$this->view->getCache()->exists($cacheKey.$nowPage)) {
             /**
              * sql for post list
              */
@@ -79,6 +117,10 @@ class IndexController extends HomeBase
                 ->where("post_status = 'publish' AND post_type = 'post' ")
                 ->orderBy('post_date DESC');
 
+            if ($isSearch && !empty($search)) {
+                $builder->andWhere(' post_title LIKE :search:', ['search' => "%{$search}%"]);
+            }
+
             /**
              * get data page
              * 数据做分页
@@ -93,7 +135,7 @@ class IndexController extends HomeBase
                 ),
                 [
                     'layoutClass' => Pager\Layout\Bootstrap::class, // 样式类
-                    'rangeLength' => 6, // 分页长度
+                    'rangeLength' => 1, // 分页长度
                     'urlMask'     => 'article?page={%page_number}', // 额外url传参
                 ]
             );
@@ -150,21 +192,9 @@ class IndexController extends HomeBase
 
         $this->view->cache(
             [
-                'key' => 'index-article-list-page-'.$nowPage,
+                'key' => $cacheKey.$nowPage,
             ]
         );
-    }
-
-    /**
-     * list for page
-     * 展示页面
-     */
-    public function pageAction ($id)
-    {
-        $this->tag->prependTitle($this->option->get('blogname')." - ");
-        $this->tag->setTitle($this->option->get('blogdescription'));
-
-        echo "page id = ".$id;
     }
 }
 
